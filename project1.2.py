@@ -2,7 +2,7 @@
 # Student ID: 3620 4751
 # Email: cmarvel@umich.edu
 # Who or what you worked with on this homework (including generative AI like ChatGPT):
-# Asked ChatGPT hints for debugging and suggesting the general sturcture of the code
+# Asked ChatGPT hints for debugging and methods/workaround to use when code wasn't performing as it should've
 
 import csv
 import unittest
@@ -23,15 +23,13 @@ class Data_Reader:
         with open(self.full_path, 'r') as ofile:
             self.csvfile = csv.reader(ofile)
             self.csvfile = list(self.csvfile)
-
+        self.nestedcsvfile = ""
         return self.csvfile
     
 
     def calculate_state_profits(self):
         storedata = self.load_datasheet()
         profitdict = {}
-
-        
 
         for row in storedata[1:]:
             if row[4] not in profitdict:
@@ -49,7 +47,7 @@ class Data_Reader:
 
             profitdict[key] = [f"Total sales: {round(value[0], 2)}", f"Total profit: {round(value[1], 2)}", f"Sales Profit Difference: {round(abs(value[0]) - abs(value[1]), 2)}", f"Was there a loss: {Losscheck}"]
 
-        pprint.pp(profitdict)
+        
         return profitdict
     
 
@@ -67,6 +65,7 @@ class Data_Reader:
             templist = []
             for row in storedata[1:]:
                 if row[4] == state:
+                    
                     templist.append({row[3]:[]})
 
                     newtemplist = []
@@ -83,22 +82,46 @@ class Data_Reader:
         storedata = self.load_datasheet()
         storelocations = self.prepare_state_list()
         
-        #for state, city in storelocations.items():
-            #print(city)
-            #storelocations[state] = 
+        for state, city in storelocations.items():
+            for d in city:
+                for k in d:
+                    countsegment = {}
+                    countcategory = {}
+                    for row in storedata[1:]:
+                        if row[3] == k and row[4] == state:
+                            if row[1] in countsegment:
+                                countsegment[row[1]] += 1
+                            else:
+                                countsegment[row[1]] = 1
+                            if row[7] in countcategory:
+                                countcategory[row[7]] += 1
+                            else:
+                                countcategory[row[7]] = 1
+                    
+                    Maxcat = ""
+                    Maxcatd = 0
+                    for kk, v in countcategory.items():
+                        if v > Maxcatd:
+                            Maxcat = kk
+                            Maxcatd = v
 
-        #print(storelocations)
+                    Maxseg = ""
+                    Maxsegd = 0
+                    for kk, v in countsegment.items():
+                        if v > Maxsegd:
+                            Maxseg = kk
+                            Maxsegd = v
 
-
-        #for state in storelocations.values():
-         #   for city in state:
-          #      for row in storedata:
-           #         if city == row[3]:
-            #            storelocations = [row[1]]
-             #           pprint.pp(state)
-               
+                    d[k] = [{Maxseg:Maxsegd}, {Maxcat:Maxcatd}]
+        
+        return storelocations
+                    
                 
-
+    def generate_store_analysis(self):
+        profitdata = self.calculate_state_profits
+        itemsdata = self.state_most_products
+        with open("analysis.txt", "w") as ofile:
+            pass
                 
             
 
@@ -112,6 +135,7 @@ def main():
     Storedata.calculate_state_profits()
     Storedata.prepare_state_list()
     Storedata.state_most_products()
+    Storedata.generate_store_analysis()
     
 
 if __name__ == '__main__':
