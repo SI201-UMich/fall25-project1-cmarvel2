@@ -31,33 +31,31 @@ class Data_Reader:
         }
 
     def load_Datasheet(self):
-
-
-        for row in self.csvfile[1:]:
-            self.data_dict['Ship Mode'].append(row[0])
-            self.data_dict['Segment'].append(row[1])
-            self.data_dict['Country'].append(row[2])
-            self.data_dict['City'].append(row[3])
-            self.data_dict['State'].append(row[4])
-            self.data_dict['Postal Code'].append(row[5])
-            self.data_dict['Region'].append(row[6])
-            self.data_dict['Category'].append(row[7])
-            self.data_dict['Sub-Category'].append(row[8])
-            self.data_dict['Sales'].append(row[9])
-            self.data_dict['Quantity'].append(int(row[10]))
-            self.data_dict['Discount'].append(float(row[11]))
-            self.data_dict['Profit'].append(float(row[12]))
         
+        rows = list(self.csvfile)
+        print(rows)
+        for row in self.csvfile[1:]:
+            if len(row) == 13:
+                self.data_dict['Ship Mode'].append(row[0])
+                self.data_dict['Segment'].append(row[1])
+                self.data_dict['Country'].append(row[2])
+                self.data_dict['City'].append(row[3])
+                self.data_dict['State'].append(row[4])
+                self.data_dict['Postal Code'].append(row[5])
+                self.data_dict['Region'].append(row[6])
+                self.data_dict['Category'].append(row[7])
+                self.data_dict['Sub-Category'].append(row[8])
+                self.data_dict['Sales'].append(row[9])
+                self.data_dict['Quantity'].append(int(row[10]))
+                self.data_dict['Discount'].append(float(row[11]))
+                self.data_dict['Profit'].append(float(row[12]))
+    
         return self.data_dict
 
         
 
     def Get_state_prices(self):
-        state_dict = {}
-
-        for state in self.data_dict['State']:
-            if state not in state_dict:
-                pass
+        pass
 
 
 
